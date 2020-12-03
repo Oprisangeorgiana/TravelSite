@@ -77,8 +77,6 @@ class ArticlePost extends LitElement {
             return html`
             <div class = "flex-container">
 
-            ${this.article.infoPosition ? "item-checked":""}
-
                     <div>
                         <picture>
                             <source media="(min-with:500px)" srcset="https://picsum.photos/200/300">
