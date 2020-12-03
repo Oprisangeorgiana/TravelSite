@@ -15,13 +15,22 @@ class ArticleDestination extends LitElement {
             background: #F0F8FF;
         }
 
-        h1 {
+        h3 {
             text-align: center;
         }
         .article-img {
             width: 250px;
             height: 290px;
         }
+
+        .flex-container {
+            display: flex;
+            
+           
+          }
+        .information {
+            margin: 40px;
+          }
         `;
     }
 
@@ -86,18 +95,16 @@ class ArticleDestination extends LitElement {
 
     render() {
         return html`
-        <section>
-            <h1> ${this.pageTitle} </h1>
-        </section>
+
         <section>
         ${this.component.map( (item) => {
             return html`
             <article>
-            <div class="row">
-                <div class="col-3">
+            <div class="flex-container">
+                <div>
                     <img src="${item.image}" alt="${item.altTag}" class="article-img">
                 </div>
-                <div class="col-9">
+                <div class="information">
                     <h3><b>${item.title}</b></h3> 
                     <p>${item.description}</p> 
                     <a href="${item.site}" target="_blank">Find out more</a>
