@@ -42,38 +42,23 @@ class ArticlePost extends LitElement {
         super();
 
         this.article = [
-            {
-                title: "First article title",
-                subtitle: "First article subtitle",
-                description: "First article description",
-                picture: "https://picsum.photos/550/350",
-                alt: "Picture1",
-                infoPosition: true
-            },
-            {
-                title: "Second article title",
-                subtitle: "Second article subtitle",
-                description: "Second article description",
-                picture: "https://picsum.photos/550/300",
-                alt: "Picture2",
-                infoPosition: true
-            },
-            {
-                title: "Third article title",
-                subtitle: "Third article subtitle",
-                description: "Third article description",
-                picture: "https://picsum.photos/550/400",
-                alt: "Picture3",
-                infoPosition: true
-            }
+            // {
+            //     title: "First article title",
+            //     subtitle: "First article subtitle",
+            //     description: "First article description",
+            //     picture: "https://picsum.photos/550/350",
+            //     alt: "Picture1",
+            //     infoPosition: true
+            // }
         ]
 
     }
 
     render() {
         return html`
-
-        ${this.article.map( (article) => { 
+        ${Object.keys(this.article).map( (key) => {
+            // this.article[key].title}}
+        // ${this.article.map( (article) => { 
             return html`
             <div class = "flex-container">
 
@@ -81,14 +66,14 @@ class ArticlePost extends LitElement {
                         <picture>
                             <source media="(min-with:500px)" srcset="https://picsum.photos/200/300">
                             <source media="(min-with:250px)" srcset="https://picsum.photos/200">
-                            <img src="${article.picture}" alt="${article.alt}">
+                            <img src="${this.article[key].picture}" alt="${this.article[key].alt}">
                         </picture>
                     </div>
 
                     <div class="information">
-                            <h4>${article.title}</h4>
-                            <h5>${article.subtitle}</h5>
-                            <p>${article.description}</p>
+                            <h4>${this.article[key].title}</h4>
+                            <h5>${this.article[key].subtitle}</h5>
+                            <p>${this.article[key].description}</p>
                     </div>
 
             </div>
@@ -96,6 +81,25 @@ class ArticlePost extends LitElement {
             `})}
         `;
     }
+
+    connectedCallback() {
+        super.connectedCallback();
+        this.getArticle();
+    }
+
+    async getArticle() {
+        const axios = window.axios;
+        try{
+            const response = await axios.get('https://devschool-2020.firebaseio.com/georgiana-oprisan/articles.json');
+            this.article = response.data;
+        //    console.log(Object.keys(this.article).map( (key) => this.article[key].title));
+        } catch(error) {
+            console.log(error);
+        }
+
+        // console.log(this.article);
+    }
+
 
 
 }
