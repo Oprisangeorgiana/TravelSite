@@ -2,14 +2,16 @@ import {
     LitElement,
     html,
     css
-} from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module"
+} from "lit-element"
+
+// import axios from 'axios';
 
 class Header extends LitElement {
 
     static get styles() {
         return css`
         nav {
-            background-color: black;
+            background-color: var(--color);
             position: sticky;
             display: flex;
             justify-content: center;
@@ -51,6 +53,15 @@ class Header extends LitElement {
             margin-bottom: 40px;
             font-size: 50px;
         }
+        .active {
+            border: 1px solid red;
+        }
+        label {
+            font-size: 15px;
+            padding: 15px;
+            text-decoration: none;
+            color: white;
+        }
         `;
     }
 
@@ -58,6 +69,8 @@ class Header extends LitElement {
         return {
             menuTitle: { type: Array },
             siteTitle: { type: String },
+            currentPath: {type: String},
+            theme: {type: String},
         }
 
     }
@@ -65,37 +78,68 @@ class Header extends LitElement {
     constructor() {
         super();
 
+        window.addEventListener('vaadin-router-location-changed', (event) =>{
+            // console.log(event);
+            this.currentPath =  event.detail.location.pathname;
+            // let pathname = event.detail.location.pathname;
+            // if(pathname == "/" ) {
+            //     this.shadowRoot.querySelector('#Home').classList.add("active");
+            //     // this.shadowRoot.querySelector('#Destination').classList.remove("active");
+            // }else if(pathname == "/destinations") {
+            //     // this.shadowRoot.querySelector('#Home').classList.remove("active");
+            //     this.shadowRoot.querySelector('#Destination').classList.add("active");
+            // }
+        });
+
+        this.theme = localStorage.getItem('theme') || 'dark';
         this.siteTitle = "Travel site"
         this.menuTitle = [
             {
                 name: "Home",
-                redirect: "home.html"
+                redirect: ""
             },
             {
                 name: "Destination",
-                redirect: "destinations.html"
+                redirect: "destinations"
             },
             {
                 name: "Language",
-                redirect: "home.html"
+                redirect: ""
             }
         ]
 
     }
 
+    
+
     render() {
+        // console.log(window.location.pathname);
+
+      
+
         return html`
         <header>
             <nav>
                 <div class="container-fluid">
                     <div class="row">
                         <h1>${this.siteTitle}</h1>
-                        <ul>
-                            ${this.menuTitle.map((title) => {
-            return html`
-                            <li><a href="${title.redirect}"> ${title.name} </a></li>
-                            `})}                    
+
+                         <ul>
+                         <!--    ${this.menuTitle.map((title) => {
+                     return html`
+                            <li id="${title.name}"><a href="/${title.redirect}"> ${title.name} </a></li>
+                            `})}  -->
+
+
+            
+                            <li class = "${this.currentPath === '/' ? 'active' : ''}"><a href="/">Home</a></li>      
+                            <li class = "${this.currentPath === '/destinations' ? 'active' : ''}"><a href="/destinations">Destinations</a></li>    
+                            <li><a href="/">Language</a></li>  
+                            
+
                         </ul> 
+                        <label><input type="checkbox" @change=${this.changeTheme}/> Use purple theme</label>
+                        
                     </div>
                 </div>
             </nav>
@@ -103,8 +147,8 @@ class Header extends LitElement {
         `;
     }
 
-    connectedCallback() {
-        super.connectedCallback();
+    // connectedCallback() {
+    //     super.connectedCallback();
 
         // const iAmYoda = new Promise((resolve, reject) => {
         //     const person ='Yoda';
@@ -133,9 +177,9 @@ class Header extends LitElement {
         // .then((response) => console.log(response))
         // .catch((error) => console.log(error));
 
-        this.getPost();
+        // this.getPost();
         // this.getPost2();
-    }
+    // }
 
     // async getPost2() {
     //     const axios = window.axios;
@@ -155,8 +199,8 @@ class Header extends LitElement {
     //     console.log('la sfarsitul metodei');
     // }
 
-    getPost() {
-        const axios = window.axios;
+    // getPost() {
+        // const axios = window.axios;
 
         // axios
         // .get('https://jsonplaceholder.typicode.com/posts')
@@ -215,6 +259,27 @@ class Header extends LitElement {
         //   .then((response) => response.json())
         //   .then((response) => console.log(response));
         
+    // }
+
+    updated(changedProperties) {
+        if(changedProperties.has("theme")) {
+            this.updateTheme();
+        }
+    }
+
+    updateTheme() {
+        // document.head.querySelector("link[data-theme]")?.remove();
+        const themeStyle = document.createElement("link");
+        // themeStyle.dataset.theme = this.theme;
+        themeStyle.rel = "stylesheet";
+        themeStyle.href = `./css/${this.theme}.css`;
+        document.head.appendChild(themeStyle);
+        localStorage.setItem("theme", this.theme);
+    }
+
+    changeTheme() {
+
+        this.theme = this.theme === "dark" ? "light" : "dark"
     }
 
 

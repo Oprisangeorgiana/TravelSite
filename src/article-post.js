@@ -2,7 +2,11 @@ import {
     LitElement,
     html,
     css
-} from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module"
+} from "lit-element"
+
+// import axios from 'axios';
+import {request} from "./lib"
+
 
 class ArticlePost extends LitElement {
 
@@ -40,6 +44,7 @@ class ArticlePost extends LitElement {
 
     constructor() {
         super();
+       
 
         this.article = [
             // {
@@ -88,16 +93,23 @@ class ArticlePost extends LitElement {
     }
 
     async getArticle() {
-        const axios = window.axios;
-        try{
-            const response = await axios.get('https://devschool-2020.firebaseio.com/georgiana-oprisan/articles.json');
-            this.article = response.data;
-        //    console.log(Object.keys(this.article).map( (key) => this.article[key].title));
-        } catch(error) {
-            console.log(error);
-        }
+        // const axios = window.axios;
+        // try{
+        //     const response = await axios.get('https://devschool-2020.firebaseio.com/georgiana-oprisan/articles.json');
+        //     this.article = response.data;
+        // //    console.log(Object.keys(this.article).map( (key) => this.article[key].title));
+        // } catch(error) {
+        //     console.log(error);
+        // }
 
-        // console.log(this.article);
+        // // console.log(this.article);
+        const location = "https://devschool-2020.firebaseio.com/georgiana-oprisan/articles.json"
+        
+       
+        localStorage.setItem("token", "ana are mere");
+        const response = await request(location);
+        this.article = response;
+        // console.log(response);
     }
 
 
