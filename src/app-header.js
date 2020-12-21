@@ -62,6 +62,16 @@ class Header extends LitElement {
             text-decoration: none;
             color: white;
         }
+
+        @media(prefers-color-scheme: dark) {
+            nav li {
+                background: grey;
+                color: white;
+                
+            }
+        }
+
+        
         `;
     }
 
